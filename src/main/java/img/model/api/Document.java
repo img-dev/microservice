@@ -11,4 +11,5 @@ public class Document {
     private String code;
     private String url;
     private String organization;
+    private String description;
 }

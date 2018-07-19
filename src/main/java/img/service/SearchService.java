@@ -1,10 +1,12 @@
 package img.service;
 
 import img.model.api.Document;
-import img.model.api.DocumentFactory;
 import img.model.search.SearchResponse;
+import img.util.DocumentMapper;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,25 +22,36 @@ public class SearchService {
     @Value("${search.host}")
     private String searchHost;
 
+    @Value("${search.default.lang}")
+    private String defaultLang;
+
     private RestTemplate restTemplate = new RestTemplate();
-    private DocumentFactory factory = new DocumentFactory();
+
+    @Autowired
+    private DocumentMapper factory;
 
 
     public List<Document> get() {
+        return get(defaultLang);
+    }
+
+    @Cacheable(cacheNames = "searches",  key="#lang")
+    public List<Document> get(String lang) {
 
         SearchResponse response = restTemplate.getForObject(searchHost, SearchResponse.class);
-        logger.info("Response: succces {} count {} result {} ",response.isSuccess(),response.getResult().getCount(), response.getResult().getResults().get(0));
-        List<Document> results = factory.fromResponse(response);
-        logger.info("Results {} ", results);
+        List<Document> results = factory.fromResponse(response, lang);
         return results;
     }
 
-    public List<Document> getByLang(String lang) {
+    public List<Document> getById(String id) {
+        return getById(id, defaultLang);
+    }
 
-        SearchResponse response = restTemplate.getForObject(searchHost, SearchResponse.class);
-        logger.info("Response: succces {} count {} result {} ",response.isSuccess(),response.getResult().getCount(), response.getResult().getResults().get(0));
-        List<Document> results = factory.fromResponse(response);
-        logger.info("Results {} ", results);
+    @Cacheable(cacheNames = "ids", key="#id.concat('-').concat(#lang)")
+    public List<Document> getById(String id, String lang) {
+
+        SearchResponse response = restTemplate.getForObject(searchHost+"?q=id:"+id, SearchResponse.class);
+        List<Document> results = factory.fromResponse(response, lang);
         return results;
     }
 

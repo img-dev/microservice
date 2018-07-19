@@ -13,6 +13,7 @@ import java.util.Map;
 public class SearchDocument {
     private String code;
     private Map<String,String> url_tornada;
+    private Map<String,String> notes_translated;
     private SearchOrganization organization;
 
 }
