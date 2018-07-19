@@ -2,6 +2,7 @@ package img.controllers;
 
 import img.model.api.Document;
 import img.service.SearchService;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@Timed
 @RequestMapping("/api/search")
 public class SearchController {
 

@@ -6,6 +6,18 @@ spring:
     sampler:
       probability: 1.0
 
+management:
+  metrics:
+    web:
+      server:
+        requests-metric-name: controller.metrics
+        auto-time-requests: false
+
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health
+
 search:
   host: http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search
   default:

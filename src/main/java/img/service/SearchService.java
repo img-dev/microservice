@@ -31,6 +31,7 @@ public class SearchService {
     private DocumentMapper factory;
 
 
+    @Cacheable(cacheNames = "searches",  key="'defaultLang'")
     public List<Document> get() {
         return get(defaultLang);
     }
@@ -43,6 +44,7 @@ public class SearchService {
         return results;
     }
 
+    @Cacheable(cacheNames = "ids", key="#id.concat('-').concat('default')")
     public List<Document> getById(String id) {
         return getById(id, defaultLang);
     }
