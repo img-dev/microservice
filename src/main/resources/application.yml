@@ -1,12 +1,14 @@
+search:
+  host: http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search
+  default:
+    lang: ca
+
+---
 spring:
   profiles: default
 
 server:
     port: 9999
-search:
-  host: http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search
-  default:
-    lang: ca
 
 ---
 spring:
